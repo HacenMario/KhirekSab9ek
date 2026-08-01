@@ -58,6 +58,17 @@ function sizeDisplay(size) {
 
 // ===================== نافذة منبثقة (تقليص الطول) =====================
 function showPopupNotification(ad, type = 'info') {
+  // إذا كان الكائن ناقصاً، نحاول جلبه من الخادم
+  if (!ad.foodType || !ad.coords) {
+    api.getAd(ad._id || ad).then(fullAd => {
+      showPopupNotification(fullAd, type);
+    }).catch(() => {
+      // فشل الجلب، نعرض رسالة بسيطة
+      alert('هناك إعلان جديد! تحقق من القائمة.');
+    });
+    return;
+  }
+
   const old = document.querySelector('.popup-notification');
   if (old) old.remove();
 
@@ -74,20 +85,20 @@ function showPopupNotification(ad, type = 'info') {
     <div class="popup-content popup-${type} popup-compact">
       <span class="popup-close" id="popup-close-btn">&times;</span>
       <div class="popup-icon">🔔</div>
-      <h3>${type === 'warning' ? 'تم حجز إعلانك!' : 'إعلان مشاركة أكل جديد !'}</h3>
+      <h3>${type === 'warning' ? 'تم حجز إعلانك!' : 'إعلان جديد متاح!'}</h3>
       <div class="popup-details">
-        <p><strong>🍲 نوع وجلة الأكل:</strong> ${ad.foodType}</p>
-        <p><strong>📦 (وجبة) الكمية:</strong> ${ad.quantity} وجبة</p>
+        <p><strong>🍲 النوع:</strong> ${ad.foodType}</p>
+        <p><strong>📦 الكمية:</strong> ${ad.quantity} وجبة</p>
         <p><strong>🌡️ الحالة:</strong> ${tempText} | <strong>📏</strong> ${sizeText}</p>
         <p><strong>📍 الموقع:</strong> ${ad.locationName}</p>
-        <p><strong>👤 إسم المتبرع:</strong> ${ad.donorName}</p>
-        <p><strong>📞 رقم الهاتف:</strong> <a href="tel:${ad.donorPhone}" style="color:#2d6a4f;">${ad.donorPhone || 'غير متوفر'}</a></p>
+        <p><strong>👤 المُتبرع:</strong> ${ad.donorName}</p>
+        <p><strong>📞 الهاتف:</strong> <a href="tel:${ad.donorPhone}" style="color:#2d6a4f;">${ad.donorPhone || 'غير متوفر'}</a></p>
         <p><strong>⏳ الوقت المتبقي:</strong> ${timeLeft}</p>
-        <p><strong>🕒 تاريخ إنتهاء الإعلان:</strong> ${expiryDate}</p>
+        <p><strong>🕒 تاريخ الانتهاء:</strong> ${expiryDate}</p>
         <p><a href="${mapsUrl}" target="_blank" class="map-link-popup">🗺️ عرض الموقع على الخريطة</a></p>
       </div>
       <div class="popup-actions">
-        <button class="popup-btn claim-popup-btn" id="popup-claim-btn">قبول</button>
+        <button class="popup-btn claim-popup-btn" id="popup-claim-btn">أقبل الإعلان</button>
         <button class="popup-btn ignore-popup-btn" id="popup-ignore-btn">تجاهل</button>
       </div>
     </div>
