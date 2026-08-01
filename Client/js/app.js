@@ -1,6 +1,5 @@
 // ===================== إعدادات =====================
 const API_BASE = '/api';
-getAd: (id) => request(`/ads/${id}`)
 const VAPID_PUBLIC_KEY = 'BF7IlardTlVn6X4dNtcTad2ixM09jH87Q-vKyo5ScWY9uzLw3y-goXcgPmC8gxBpFWIGVgFWKxwC2pTDXNYnlD4';
 
 let map;
@@ -52,20 +51,17 @@ function formatExpiryDate(expiryTime) {
 function tempDisplay(temp) {
   return temp === 'hot' ? '🔥 ساخن' : '❄️ بارد';
 }
+
 function sizeDisplay(size) {
   return size === 'bike' ? '🛵 تكفي دراجة نارية' : '🚗 تحتاج سيارة';
 }
 
-// ===================== نافذة منبثقة (تقليص الطول) =====================
+// ===================== نافذة منبثقة =====================
 function showPopupNotification(ad, type = 'info') {
-  // إذا كان الكائن ناقصاً، نحاول جلبه من الخادم
-  if (!ad.foodType || !ad.coords) {
-    api.getAd(ad._id || ad).then(fullAd => {
-      showPopupNotification(fullAd, type);
-    }).catch(() => {
-      // فشل الجلب، نعرض رسالة بسيطة
-      alert('هناك إعلان جديد! تحقق من القائمة.');
-    });
+  if (!ad || !ad.foodType) {
+    if (ad && ad._id) {
+      api.getAd(ad._id).then(fullAd => showPopupNotification(fullAd, type)).catch(() => {});
+    }
     return;
   }
 
@@ -74,7 +70,7 @@ function showPopupNotification(ad, type = 'info') {
 
   const timeLeft = getTimeLeft(ad.expiryTime);
   const expiryDate = formatExpiryDate(ad.expiryTime);
-  const mapsUrl = `https://www.google.com/maps?q=${ad.coords.lat},${ad.coords.lng}`;
+  const mapsUrl = ad.coords ? `https://www.google.com/maps?q=${ad.coords.lat},${ad.coords.lng}` : '#';
   const tempText = ad.temp ? tempDisplay(ad.temp) : '';
   const sizeText = ad.size ? sizeDisplay(ad.size) : '';
 
@@ -130,16 +126,20 @@ function loadUser() {
   if (userStr) currentUser = JSON.parse(userStr);
   return currentUser;
 }
+
 function saveUser(user) {
   currentUser = user;
   localStorage.setItem('faddel_user', JSON.stringify(user));
 }
+
 function getToken() {
   return localStorage.getItem('faddel_token');
 }
+
 function isLoggedIn() {
   return !!getToken();
 }
+
 function logout() {
   localStorage.removeItem('faddel_token');
   localStorage.removeItem('faddel_user');
@@ -188,6 +188,7 @@ const api = {
   deleteNotifications: () => request('/notifications', { method: 'DELETE' }),
   deleteAllClaims: () => request('/ads/my-claims/all', { method: 'DELETE' }),
   deleteAllDonations: () => request('/ads/my-donations/all', { method: 'DELETE' }),
+  getAd: (id) => request(`/ads/${id}`)
 };
 
 // ===================== إشعارات Web Push =====================
@@ -307,14 +308,12 @@ function router() {
   const parts = hash.substring(2).split('/');
   currentView = parts[0];
 
-  // إغلاق كل اتصالات SSE السابقة
   if (globalEventSource) globalEventSource.close();
   if (donorEventSource) donorEventSource.close();
   if (notificationEventSource) notificationEventSource.close();
 
   renderNav();
 
-  // فتح SSE للإشعارات في جميع الصفحات المحمية
   if (isLoggedIn() && currentView !== 'login' && currentView !== 'register') {
     setupNotificationSSE();
   }
@@ -388,7 +387,7 @@ function buildAdCard(ad) {
 function setupGlobalSSE() {
   const token = getToken();
   if (!token) return;
-  globalEventSource = new EventSource(`/api/ads/events?token=${encodeURIComponent(token)}`)
+  globalEventSource = new EventSource(`/api/ads/events?token=${encodeURIComponent(token)}`);
   globalEventSource.addEventListener('new-ad', (e) => {
     const ad = JSON.parse(e.data);
     if (currentUser && ad.donorId === currentUser.id) return;
@@ -422,9 +421,7 @@ function setupDonorSSE() {
   donorEventSource.addEventListener('new-message', (e) => {
     try {
       const msg = JSON.parse(e.data);
-      // تحديث الإشعارات
-      loadNotifications(); // لتحديث القائمة والعداد
-      // إذا كنا في صفحة المحادثة الخاصة بهذا الإعلان، أضف الرسالة للقائمة
+      loadNotifications();
       if (currentView === 'chat' && window.location.hash.endsWith(msg.adId)) {
         const list = document.getElementById('messages-list');
         if (list) {
@@ -589,6 +586,7 @@ function renderProfile() {
     }
   });
 }
+
 // ===================== الإعلانات المتاحة =====================
 async function renderAvailableAds() {
   app.innerHTML = '<p>جاري تحميل الإعلانات...</p>';
@@ -660,7 +658,7 @@ async function renderMyClaims() {
         try {
           const res = await api.deleteAllClaims();
           alert(res.message);
-          router(); // إعادة تحميل الصفحة
+          router();
         } catch (err) { alert(err.message); }
       }
     });
@@ -781,7 +779,6 @@ async function renderChat(adId) {
     `;
     app.innerHTML = html;
 
-    // فتح SSE للمستخدم (لاستقبال رسائل جديدة وتحديث المحادثة مباشرة)
     setupDonorSSE();
 
     document.getElementById('chat-send-btn').addEventListener('click', async () => {
@@ -790,7 +787,6 @@ async function renderChat(adId) {
       try {
         await api.sendMessage(adId, text, otherPartyId);
         document.getElementById('chat-input-text').value = '';
-        // لا نضيف الرسالة هنا، سيتم إضافتها عبر SSE
       } catch (err) {
         alert(err.message);
       }
@@ -896,7 +892,6 @@ function buildAddForm() {
   });
 }
 
-
 function initMap() {
   if (map) return;
   const defaultLat = 36.7538;
@@ -920,7 +915,6 @@ function initMap() {
     updateCoordsDisplay(e.latlng.lat, e.latlng.lng);
   });
 }
-
 
 function updateCoordsDisplay(lat, lng) {
   document.getElementById('coords-display').textContent = `الإحداثيات: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
