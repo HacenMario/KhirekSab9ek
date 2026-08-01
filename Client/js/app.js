@@ -376,7 +376,7 @@ function buildAdCard(ad) {
 function setupGlobalSSE() {
   const token = getToken();
   if (!token) return;
-  globalEventSource = new EventSource(`${API_BASE}/ads/events?token=${encodeURIComponent(token)}`);
+  globalEventSource = new EventSource(`/api/ads/events?token=${encodeURIComponent(token)}`)
   globalEventSource.addEventListener('new-ad', (e) => {
     const ad = JSON.parse(e.data);
     if (currentUser && ad.donorId === currentUser.id) return;
