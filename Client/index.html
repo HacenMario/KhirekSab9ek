@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>فَضّل – منصة فائض الطعام</title>
+  <title>خيرك سابقك – منصة مشاركة الأكل و الأجر</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
 </head>
 <body>
   <header>
-    <h1>🥘 فَضّل</h1>
+    <h1>🥘 خيرك سابقك</h1>
     <nav id="main-nav">
       <!-- يُملأ عبر JavaScript -->
     </nav>
@@ -27,12 +27,12 @@
   <div id="add-modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2>أضف إعلان طعام</h2>
+      <h2>أضف إعلان مشاركة طعام</h2>
       <form id="add-form">
-        <input type="text" id="foodType" placeholder="نوع الطعام" required>
-        <input type="number" id="quantity" placeholder="الكمية" required>
+        <input type="text" id="foodType" placeholder="نوع الأكل" required>
+        <input type="number" id="quantity" placeholder="الكمية (وجبة)" required>
         <input type="text" id="locationName" placeholder="وصف الموقع" required>
-        <label>تاريخ انتهاء الصلاحية:</label>
+        <label>تاريخ انتهاء صلاحية الإعلان:</label>
         <input type="datetime-local" id="expiryInput" required>
         <label>حدد الموقع على الخريطة:</label>
         <div id="map-container"></div>
