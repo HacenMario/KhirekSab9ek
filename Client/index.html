@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فَضّل – منصة فائض الطعام</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <header>
+    <h1>🥘 فَضّل</h1>
+    <nav id="main-nav">
+      <!-- يُملأ عبر JavaScript -->
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- محتوى ديناميكي حسب المسار -->
+  </main>
+
+  <button id="add-btn" class="fab" title="أضف إعلاناً" style="display:none;">＋</button>
+
+  <!-- نافذة منبثقة لإضافة الإعلان -->
+  <div id="add-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>أضف إعلان طعام</h2>
+      <form id="add-form">
+        <input type="text" id="foodType" placeholder="نوع الطعام" required>
+        <input type="number" id="quantity" placeholder="الكمية" required>
+        <input type="text" id="locationName" placeholder="وصف الموقع" required>
+        <label>تاريخ انتهاء الصلاحية:</label>
+        <input type="datetime-local" id="expiryInput" required>
+        <label>حدد الموقع على الخريطة:</label>
+        <div id="map-container"></div>
+        <p id="coords-display">الإحداثيات: لم تُحدد بعد</p>
+        <button type="submit">نشر الإعلان</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

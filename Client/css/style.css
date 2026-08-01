@@ -1,0 +1,840 @@
+/* ========== متغيرات أساسية ========== */
+:root {
+  --primary: #2d6a4f;
+  --primary-light: #40916c;
+  --primary-dark: #1b4332;
+  --accent: #f0a04b;
+  --accent-light: #f7c98b;
+  --bg: #f6faf7;
+  --surface: #ffffff;
+  --surface-glass: rgba(255, 255, 255, 0.65);
+  --text: #1e3b2f;
+  --text-secondary: #5c7a6b;
+  --danger: #c44536;
+  --danger-hover: #a33327;
+  --border-radius: 20px;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,0.08);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', 'Tajawal', Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  -webkit-font-smoothing: antialiased;
+  direction: rtl;
+}
+
+/* ========== الهيدر ========== */
+header {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav button {
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,0.05);
+  color: var(--text);
+  padding: 10px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+nav button:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45,106,79,0.25);
+}
+
+nav span {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 0 10px;
+}
+
+/* ========== المحتوى الرئيسي ========== */
+main {
+  max-width: 850px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+/* ========== شبكة البطاقات ========== */
+.ads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* ========== البطاقات ========== */
+.card {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  border-right: 5px solid transparent;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-light), var(--accent));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card[data-id] {
+  border-right-color: var(--accent);
+}
+
+.card.claimed {
+  opacity: 0.8;
+  background: #f8f8f8;
+  border-right-color: var(--danger);
+}
+
+.card.claimed::before {
+  background: var(--danger);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+.expiry {
+  background: #ffebee;
+  color: var(--danger);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.card-body p {
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* أزرار البطاقة */
+.claim-btn, .donor-info-btn, .delete-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+  margin-top: 12px;
+  box-shadow: 0 4px 12px rgba(45,106,79,0.3);
+}
+
+.claim-btn:hover, .donor-info-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.03);
+}
+
+.delete-btn {
+  background: var(--danger);
+  box-shadow: 0 4px 12px rgba(196,69,54,0.3);
+}
+
+.delete-btn:hover {
+  background: var(--danger-hover);
+  transform: scale(1.03);
+}
+
+/* رابط الخريطة */
+.map-link, .map-link-popup {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+}
+
+.map-link:hover, .map-link-popup:hover {
+  border-bottom-color: var(--primary);
+}
+
+.map-link-popup {
+  color: white !important;
+  background: var(--primary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+/* تفاصيل المتبرع */
+.donor-details {
+  background: #f0f7f4;
+  border-radius: 16px;
+  padding: 15px;
+  margin-top: 12px;
+  border: 1px solid rgba(0,0,0,0.05);
+  animation: fadeIn 0.3s;
+}
+
+.donor-details a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* حاوية الرد السريع */
+.quick-reply {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.quick-reply input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 0.9rem;
+}
+
+.quick-reply button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ========== النافذة المنبثقة (Popup) ========== */
+.popup-notification {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s;
+}
+
+.popup-overlay {
+  position: absolute;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+}
+
+.popup-content {
+  position: relative;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
+  padding: 30px 25px; /* تقليص padding ليبدو مضغوطاً */
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(255,255,255,0.5);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.popup-content.popup-warning {
+  border-top: 5px solid var(--accent);
+}
+
+.popup-content.popup-info {
+  border-top: 5px solid var(--primary);
+}
+
+.popup-compact {
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+.popup-compact h3 {
+  font-size: 1.3rem;
+}
+
+.popup-icon {
+  font-size: 2.5rem;
+  margin-bottom: 5px;
+}
+
+.popup-content h3 {
+  margin: 10px 0 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.popup-details p {
+  text-align: right;
+  margin: 6px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.popup-close {
+  position: absolute;
+  top: 12px; right: 15px;
+  font-size: 26px;
+  cursor: pointer;
+  color: #999;
+  transition: 0.2s;
+  z-index: 5;
+}
+
+.popup-close:hover {
+  color: var(--danger);
+  transform: scale(1.2);
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.popup-btn {
+  padding: 10px 24px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.claim-popup-btn {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(45,106,79,0.4);
+}
+
+.claim-popup-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.ignore-popup-btn {
+  background: #eee;
+  color: #555;
+}
+
+.ignore-popup-btn:hover {
+  background: #ddd;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ========== نموذج الإضافة (Modal) ========== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: white;
+  margin: 5% auto;
+  padding: 30px;
+  width: 90%;
+  max-width: 550px;
+  border-radius: var(--border-radius);
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  animation: slideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  transition: 0.2s;
+}
+
+.close:hover {
+  color: var(--danger);
+  transform: scale(1.2);
+}
+
+.modal-content h2 {
+  margin-bottom: 25px;
+  color: var(--primary-dark);
+  font-size: 1.5rem;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content label {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  font-size: 1rem;
+  background: #fafafa;
+  transition: var(--transition);
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(45,106,79,0.1);
+  outline: none;
+  background: white;
+}
+
+.date-confirm {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.date-confirm input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.date-confirm button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#map-container {
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#coords-display {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+}
+
+.modal-content button[type="submit"],
+.location-btn {
+  background: var(--primary);
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-content button[type="submit"]:hover,
+.location-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(45,106,79,0.3);
+}
+
+.location-btn {
+  margin-bottom: 10px;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 18px;
+}
+
+/* ========== زر الإضافة العائم ========== */
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, var(--accent), #f7931e);
+  color: white;
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(240,160,75,0.5);
+  cursor: pointer;
+  z-index: 90;
+  transition: var(--transition);
+}
+
+.fab:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 14px 30px rgba(240,160,75,0.7);
+}
+
+/* ========== صفحات المصادقة والحساب ========== */
+.auth-form {
+  max-width: 420px;
+  margin: 50px auto;
+  background: white;
+  padding: 35px 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.4s;
+}
+
+.auth-form h2 {
+  text-align: center;
+  color: var(--primary-dark);
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+.auth-form input,
+.auth-form select {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  font-size: 1rem;
+  background: #fafafa;
+  transition: var(--transition);
+}
+
+.auth-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(45,106,79,0.1);
+  outline: none;
+}
+
+.auth-form button[type="submit"] {
+  background: var(--primary);
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 30px;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 10px;
+}
+
+.auth-form button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.auth-form p {
+  text-align: center;
+  margin-top: 15px;
+  color: var(--text-secondary);
+}
+
+.auth-form a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ========== جرس الإشعارات ========== */
+#notif-bell {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  background: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 91;
+  font-size: 24px;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* قائمة الإشعارات المنسدلة */
+.notif-dropdown {
+  position: fixed;
+  bottom: 160px;
+  right: 30px;
+  width: 300px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  display: none;
+  flex-direction: column;
+  z-index: 92;
+  overflow: hidden;
+}
+
+.notif-dropdown.open {
+  display: flex;
+}
+
+.notif-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.notif-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.notif-item.unread {
+  font-weight: bold;
+  background: #f0f7f4;
+}
+
+.notif-actions {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+
+.notif-actions button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ========== واجهة المحادثة ========== */
+.chat-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.chat-header {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--primary-dark);
+  text-align: center;
+}
+
+.messages-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.message.sent {
+  align-items: flex-end;
+}
+
+.message.received {
+  align-items: flex-start;
+}
+
+.message-text {
+  padding: 8px 14px;
+  border-radius: 18px;
+  max-width: 70%;
+  word-break: break-word;
+}
+
+.message.sent .message-text {
+  background: var(--primary);
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+.message.received .message-text {
+  background: #e9ecef;
+  color: #333;
+  border-bottom-left-radius: 5px;
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+}
+
+.chat-input button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ========== استجابة الجوال ========== */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+  nav button {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+  .modal-content {
+    margin: 10% auto;
+    padding: 20px;
+    width: 95%;
+  }
+  .popup-content {
+    padding: 20px 15px;
+    max-width: 90%;
+  }
+}
