@@ -73,20 +73,20 @@ function showPopupNotification(ad, type = 'info') {
     <div class="popup-content popup-${type} popup-compact">
       <span class="popup-close" id="popup-close-btn">&times;</span>
       <div class="popup-icon">🔔</div>
-      <h3>${type === 'warning' ? 'تم حجز إعلانك!' : 'إعلان جديد متاح!'}</h3>
+      <h3>${type === 'warning' ? 'تم حجز إعلانك!' : 'إعلان مشاركة أكل جديد !'}</h3>
       <div class="popup-details">
-        <p><strong>🍲 النوع:</strong> ${ad.foodType}</p>
-        <p><strong>📦 الكمية:</strong> ${ad.quantity} وجبة</p>
+        <p><strong>🍲 نوع وجلة الأكل:</strong> ${ad.foodType}</p>
+        <p><strong>📦 (وجبة) الكمية:</strong> ${ad.quantity} وجبة</p>
         <p><strong>🌡️ الحالة:</strong> ${tempText} | <strong>📏</strong> ${sizeText}</p>
         <p><strong>📍 الموقع:</strong> ${ad.locationName}</p>
-        <p><strong>👤 المُتبرع:</strong> ${ad.donorName}</p>
-        <p><strong>📞 الهاتف:</strong> <a href="tel:${ad.donorPhone}" style="color:#2d6a4f;">${ad.donorPhone || 'غير متوفر'}</a></p>
+        <p><strong>👤 إسم المتبرع:</strong> ${ad.donorName}</p>
+        <p><strong>📞 رقم الهاتف:</strong> <a href="tel:${ad.donorPhone}" style="color:#2d6a4f;">${ad.donorPhone || 'غير متوفر'}</a></p>
         <p><strong>⏳ الوقت المتبقي:</strong> ${timeLeft}</p>
-        <p><strong>🕒 تاريخ الانتهاء:</strong> ${expiryDate}</p>
+        <p><strong>🕒 تاريخ إنتهاء الإعلان:</strong> ${expiryDate}</p>
         <p><a href="${mapsUrl}" target="_blank" class="map-link-popup">🗺️ عرض الموقع على الخريطة</a></p>
       </div>
       <div class="popup-actions">
-        <button class="popup-btn claim-popup-btn" id="popup-claim-btn">أقبل الإعلان</button>
+        <button class="popup-btn claim-popup-btn" id="popup-claim-btn">قبول</button>
         <button class="popup-btn ignore-popup-btn" id="popup-ignore-btn">تجاهل</button>
       </div>
     </div>
@@ -148,7 +148,7 @@ async function request(url, options = {}) {
     localStorage.removeItem('faddel_token');
     localStorage.removeItem('faddel_user');
     window.location.hash = '#/login';
-    throw new Error('انتهت الجلسة');
+    throw new Error('يرجي مراجعة معلومات الدخول');
   }
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'حدث خطأ' }));
@@ -368,7 +368,7 @@ function buildAdCard(ad) {
         <p><span>🕒</span> ${expiryDate}</p>
         <p><a href="${mapsUrl}" target="_blank" rel="noopener" class="map-link">🗺️ عرض الموقع على الخريطة</a></p>
       </div>
-      <button class="claim-btn" onclick="claimAd('${ad._id}')">أقبل هذا الإعلان</button>
+      <button class="claim-btn" onclick="claimAd('${ad._id}')">أقبل</button>
     </div>
   `;
 }
@@ -419,7 +419,7 @@ function setupDonorSSE() {
           const isSent = msg.senderId === currentUser.id;
           const div = document.createElement('div');
           div.className = `message ${isSent ? 'sent' : 'received'}`;
-          div.innerHTML = `<div class="message-text">${msg.text}</div><div class="message-time">${new Date(msg.createdAt).toLocaleTimeString('ar-SA', {hour:'2-digit',minute:'2-digit'})}</div>`;
+          div.innerHTML = `<div class="message-text">${msg.text}</div><div class="message-time">${new Date(msg.createdAt).toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'})}</div>`;
           list.appendChild(div);
           list.scrollTop = list.scrollHeight;
         }
@@ -755,7 +755,7 @@ async function renderChat(adId) {
       html += `
         <div class="message ${isSent ? 'sent' : 'received'}">
           <div class="message-text">${msg.text}</div>
-          <div class="message-time">${new Date(msg.createdAt).toLocaleTimeString('ar-SA', {hour:'2-digit',minute:'2-digit'})}</div>
+          <div class="message-time">${new Date(msg.createdAt).toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'})}</div>
         </div>
       `;
     });
