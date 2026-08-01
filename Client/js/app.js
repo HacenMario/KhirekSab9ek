@@ -1,5 +1,5 @@
 // ===================== إعدادات =====================
-const API_BASE = 'https://khireksab9ek.onrender.com/api';
+const API_BASE = '';
 const VAPID_PUBLIC_KEY = 'BF7IlardTlVn6X4dNtcTad2ixM09jH87Q-vKyo5ScWY9uzLw3y-goXcgPmC8gxBpFWIGVgFWKxwC2pTDXNYnlD4';
 
 let map;
