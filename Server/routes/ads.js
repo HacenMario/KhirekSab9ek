@@ -234,4 +234,25 @@ router.get('/events/:userId', auth, (req, res) => {
   });
 });
 
+// جلب إعلان واحد (للمصرح له فقط)
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const ad = await Ad.findById(req.params.id);
+    if (!ad) return res.status(404).json({ error: 'الإعلان غير موجود' });
+    
+    const userId = req.user._id.toString();
+    const isDonor = ad.donorId.toString() === userId;
+    const isRecipient = ad.recipientId && ad.recipientId.toString() === userId;
+    
+    // السماح بالوصول فقط للمتبرع أو المستلم
+    if (!isDonor && !isRecipient) {
+      return res.status(403).json({ error: 'غير مصرح لك برؤية هذا الإعلان' });
+    }
+    
+    res.json(ad);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
