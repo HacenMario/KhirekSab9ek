@@ -398,7 +398,7 @@ function setupDonorSSE() {
   const token = getToken();
   if (!token) return;
   if (donorEventSource) donorEventSource.close();
-  donorEventSource = new EventSource(`${API_BASE}/ads/events/${user.id}?token=${encodeURIComponent(token)}`);
+  donorEventSource = new EventSource(`/api/ads/events/${user.id}?token=${encodeURIComponent(token)}`);
   
   donorEventSource.addEventListener('ad-claimed', (e) => {
     const ad = JSON.parse(e.data);
@@ -432,7 +432,7 @@ function setupNotificationSSE() {
   const token = getToken();
   if (!token) return;
   if (notificationEventSource) notificationEventSource.close();
-  notificationEventSource = new EventSource(`${API_BASE}/notifications/events?token=${encodeURIComponent(token)}`);
+  notificationEventSource = new EventSource(`/api/notifications/events?token=${encodeURIComponent(token)}`);
   notificationEventSource.addEventListener('notification', (e) => {
     try {
       const notif = JSON.parse(e.data);
