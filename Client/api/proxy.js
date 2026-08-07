@@ -1,6 +1,6 @@
 // هذا الملف يعمل كوكيل لجميع طلبات /api/* ويعيد توجيهها إلى Render
 export default async function handler(req, res) {
-  const targetUrl = `https://khireksab9ek.onrender.com${req.url.replace('/api', '/api')}`;
+  const targetUrl = `https://khireksab9ek-va82.onrender.com${req.url.replace('/api', '/api')}`;
   
   const headers = {};
   // نسخ الرؤوس المهمة
