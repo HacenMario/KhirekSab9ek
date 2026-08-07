@@ -10,7 +10,7 @@ self.addEventListener('push', event => {
       icon: '/icon-192.png',
       badge: '/badge-72.png',
       vibrate: [200, 100, 200],
-      tag: 'faddel',
+      tag: 'KhirekSab9ek',
       data: data || {}
     })
   );
