@@ -93,7 +93,7 @@ app.get('/', (req, res) => {
 
 // ===================== آلية منع السكون =====================
 const PORT = process.env.PORT || 3000;
-const APP_URL = process.env.APP_URL || `https://khireksab9ek.onrender.com`; // 
+const APP_URL = process.env.APP_URL || `https://khireksab9ek-va82.onrender.com`; // 
 
 function keepAlive() {
   // نستخدم URL نقطة الفحص الصحي لأنها خفيفة ولا تستهلك موارد
